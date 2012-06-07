@@ -1,1 +1,1 @@
-helllo worlddd
+ehoc "pancake"; echo "waffles"; for (true) echo "a"; mkdir <dir>; end quit
