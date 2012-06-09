@@ -37,25 +37,54 @@ class Interpreter
   end
 
   def getfromfile(path)#Get the query from a file
-  File.open(path).each { |line|
-    @query.concat(line)
-  }
+  file = File.open(path, "rb")
+  @query = file.read
   createtree(@rootnode)
   end
 
-  def createtree(currentnode)#Make a tree from the commands
+  def createtree(currentnode, query = nil)#Make a tree from the commands
   command = String.new
+  if(query == nil)
+	query = @query
+	end
   i = 0
-  while i < @query.size do
-	if(@query[i] == 59)#Stands for ;
+  while i < query.size do
+	if(query[i] == 59)#59 stands for ;
 		currentnode.addnode(TreeNode.new(command))
 		command = String.new
+
+	elsif(query[i, 3].upcase.eql? "FOR")
+	     #Process "for" loop
+		condition = String.new #The conditions of the foor loop
+		body = String.new #The commands inside the loop
+		while !(query[i] == 123) do#Get the conditions, ie. push everything until the bracket
+			condition.concat(query[i])
+			i += 1
+		end #while
+		brackets = 0
+		while brackets >= 0 do#Find the closing bracket
+			i += 1
+			if(query[i] == 123)
+			  brackets += 1
+			elsif(query[i] == 125)
+			  brackets -= 1
+			end
+
+			if(brackets >= 0)
+			  body.concat(query[i])
+			end
+		end #while
+		#Make the for loop tree
+		fornode = TreeNode.new(condition)
+		createtree(fornode, body)
+		currentnode.addnode(fornode)
+
 	else
-		command.concat(@query[i])
-	end
+		command.concat(query[i])
+	end #if
 	i += 1
-  end
-  end
+  end #while
+  end #createtree
 
 
   def runquery

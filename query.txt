@@ -1,1 +1,1 @@
-ehoc "pancake"; echo "waffles"; for (true) echo "a"; mkdir <dir>; end quit
+ehoc "pancake"; echo "waffles"; for (true) {echo "a"; for (true) {do thing;} mkdir <dir>;} quit
