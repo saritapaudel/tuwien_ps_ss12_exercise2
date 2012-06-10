@@ -1,0 +1,10 @@
+# Das Werkzeug erstellt für alle Bilder in einem Ordner je zwei Kopien in unterschiedlichen Größen in anderen Ordnern und fügt für jedes Bild eine passende Zeile in eine bestehende HTML-Datei ein, sodass die Bilder in einer Übersichtstabelle und im Detail auf einem Web-Browser betrachtet werden können.
+
+for "<name>.jpg" do {
+	cp <name>.jpg www/detail/<name>.jpg
+	convert <name>.jpg -resize 100x100 www/thumb/<name>.jpg
+	echo "<tr><td><a href='detail/<name>.jpg'><img src='thumb/<name>.jpg"/></a></td><td><name></td></tr>" >> www/table.txt
+	cat www/header.txt > www/index.html
+	cat www/table.txt >> www/index.html
+	cat www/footer.txt >> www/index.html
+}

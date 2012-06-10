@@ -1,0 +1,14 @@
+# Angenommen, Sie wollen mehrere Texte, die Sie per Mail bekommen und in einem Verzeichnis nach einem bestimmten Namensschema abgelegt haben, zu einer Einheit zusammenfügen. Das Werkzeug kann Sie dabei unterstützen, indem es die entsprechend dem Namensschema zusammengehörenden Dateien zu großen Dateien zusammenfasst und je eine zusammengefasste Datei in einem Editor für weitere Korrekturen öffnet.
+
+do {
+	for "<schema>_<message>.txt" do {
+		echo -n "" > <schema>.txt
+		cat <schema>_<message>.txt >> <schema>.txt
+		try {
+			open <schema>.txt
+			nano <schema>.txt
+			emacs <schema>.txt
+			vi <schema>.txt
+		}
+	}
+}
