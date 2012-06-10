@@ -1,23 +1,19 @@
 # Language specification
 
-Our language is composed of *actions*. Each script has single top-level action. Each action has a return value, with `0` indicating success and everything else failure. There are five different kinds actions, which are explained in detail below. 
+Our language is composed of *actions*. Each script has single top-level action. Each action has a return value, with `0` indicating success and everything else failure. There are five different kinds of  action, which are explained in detail below. 
 
-Here's a simple pseudo-BNF of the proposed syntax:
+Here's a simple pseudo-BNF of the syntax:
 
 	<action> := <primitive> | <sequence> | <alternative> | <set> | <loop>
-	<actions> := <action> "\n" <actions>
-	<sequence> := "do" "{" <actions> "}"
-	<alternative> := "try" "{" <actions> "}"
+	<actions> := "{" <action> [ "\n" <actions> ] "}"
+	<sequence> := "do" <actions>
+	<alternative> := "try" <actions>
 	<set> := "for" <pattern> <action>
 	<loop> := "loop" <action>
-
------------------------------------------
 
 ## Primitives
 
 A `<primitive>` is anything that's not one of the other actions. It is directly executed as a shell command, including arguments, e.g. `echo -n "hello world"`.
-
------------------------------------------
 
 ## Sequences
 
@@ -29,8 +25,6 @@ A `<sequence>` is simply a list of actions, separated by line breaks. All action
 		echo "if foo.txt does not exist, this is never executed"
 	}
 
------------------------------------------
-
 ## Alternatives
 
 An `<alternative>` is also a list of actions, but with different semantics: only the first action is executed. If that fails, the second action is executed. If that fails, the third action is executed and so on. As soon as one of the actions succeeds, the whole block succeeds. In the following example, the directory `foo` is only created if it does not already exist (i.e. `test` fails):
@@ -41,11 +35,9 @@ An `<alternative>` is also a list of actions, but with different semantics: only
 		echo "could not create directory foo"
 	}
 
------------------------------------------
-
 ## Sets
 
-For each file specified by a given pattern, execute a given action. If the action fails for one of the files, the whole `<set>` fails and any remaining files are skipped.
+In a `<set>` an action is executed once for each file specified by a given pattern. If the action fails for one of the files, the whole `<set>` fails and any remaining files are skipped.
 	
 The `<pattern>` is a unix file path, surrounded by quotation marks, and can include *named wildcards*, surrounded by angle brackets. E.g. the pattern `"~/pics/<year>/<file>.jpg"` contains the wildcards `<year>` and `<file>`.
 	
@@ -70,11 +62,9 @@ To keep things as simple as possible, everything that matches a declared wildcar
 		}
 	}
 	
------------------------------------------
-
 ## Loops
 	
-The `<loop>` repeatedly executes as long as its sub-action is successful and at least one `<primitive>` is executed. The return value of the loop is the return value of its action. This means that the only way a loop can terminate with success instead of failure is if its action is a `<set>` that does not specify any files, e.g.
+The `<loop>` repeatedly executes as long as the given action is successful and at least one `<primitive>` action is executed per iteration. The return value of the loop is the return value of its action. This means that the only way a loop can terminate with success instead of failure is if its action is a `<set>` that does not specify any files, e.g.
 	
 	loop {
 		for "" do {
@@ -82,8 +72,6 @@ The `<loop>` repeatedly executes as long as its sub-action is successful and at 
 		}
 	}
 	
------------------------------------------
-
 ## Miscellaneous
 
 - Any line beginning with `#` is a comment (there are no inline comments).
