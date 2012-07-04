@@ -1,1 +1,4 @@
-ehoc "pancake"; echo "waffles"; for (true) {echo "a"; for (true) {do thing;} mkdir <dir>;} quit
+#simplest test file
+echo "i like"
+echo "pancake"
+
