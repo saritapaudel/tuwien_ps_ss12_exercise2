@@ -28,7 +28,7 @@ class Interpreter
   #ascii constants
   ENDLINE = 10.chr
   SPACE = 32.chr
-  COMMENT = "#"#hash
+  COMMENT = "#"
  
   def initialize()
   @query = String.new
@@ -59,22 +59,20 @@ class Interpreter
   while i < query.size do
 	i = ignorespaces(i)
 
-	if(query[i] == COMMENT)
+	if(query[i] == COMMENT)#Skip line if it's a comment
 	i = nextline(i)
-	elsif(query[i, 3].upcase.eql? "FOR")
-	     #Process "for" loop
-		condition = String.new #The conditions of the foor loop
-		body = String.new #The commands inside the loop
-		while !(query[i] == 123) do#Get the conditions, ie. push everything until the bracket
-			condition.concat(query[i])
-			i += 1
-		end #while
+
+	elsif(query[i, 3].upcase.eql? "DO ")
+		body = String.new #The primitves inside the sequence
 		brackets = 0
-		while brackets >= 0 do#Find the closing bracket
+		while !(query[i] == "{") do#Go to the position of the opening bracket
+		i += 1
+		end
+		while brackets >= 0 do#Get the stuff inside the brackets
 			i += 1
-			if(query[i] == 123)
+			if(query[i] == "{")
 			  brackets += 1
-			elsif(query[i] == 125)
+			elsif(query[i] == "}")
 			  brackets -= 1
 			end
 
@@ -82,10 +80,96 @@ class Interpreter
 			  body.concat(query[i])
 			end
 		end #while
-		#Make the for loop tree
-		fornode = TreeNode.new("loop", condition)
+
+		#Add the tree node and process the body
+		donode = TreeNode.new("sequence", "do")
+		createtree(donode, body)
+		currentnode.addnode(donode)
+
+
+	elsif(query[i, 4].upcase.eql? "TRY ")
+		body = String.new #The primitves inside the sequence
+		brackets = 0
+		while !(query[i] == "{") do#Go to the position of the opening bracket
+		i += 1
+		end
+		while brackets >= 0 do#Get the stuff inside the brackets
+			i += 1
+			if(query[i] == "{")
+			  brackets += 1
+			elsif(query[i] == "}")
+			  brackets -= 1
+			end
+
+			if(brackets >= 0)
+			  body.concat(query[i])
+			end
+		end #while
+
+		#Add the tree node and process the body
+		trynode = TreeNode.new("alternative", "try")
+		createtree(trynode, body)
+		currentnode.addnode(trynode)
+
+	elsif(query[i, 4].upcase.eql? "FOR ")
+		value = String.new
+		body = String.new #The primitves inside the sequence
+		brackets = 0
+
+		while !(query[i] == "\"") do#Go to the position wildcards
+		i += 1
+		end
+		i += 1
+		while !(query[i] == "\"") do
+		value.concat(query[i])
+		i += 1
+		end
+
+		while !(query[i] == "{") do#Go to the position of the opening bracket
+		i += 1
+		end
+		while brackets >= 0 do#Get the stuff inside the brackets
+			i += 1
+			if(query[i] == "{")
+			  brackets += 1
+			elsif(query[i] == "}")
+			  brackets -= 1
+			end
+
+			if(brackets >= 0)
+			  body.concat(query[i])
+			end
+		end #while
+
+		#Add the tree node and process the body
+		fornode = TreeNode.new("for", value)
 		createtree(fornode, body)
 		currentnode.addnode(fornode)
+
+
+	elsif(query[i, 5].upcase.eql? "LOOP ")
+		body = String.new #The primitves inside the sequence
+		brackets = 0
+		while !(query[i] == "{") do#Go to the position of the opening bracket
+		i += 1
+		end
+		while brackets >= 0 do#Get the stuff inside the brackets
+			i += 1
+			if(query[i] == "{")
+			  brackets += 1
+			elsif(query[i] == "}")
+			  brackets -= 1
+			end
+
+			if(brackets >= 0)
+			  body.concat(query[i])
+			end
+		end #while
+
+		#Make the for loop tree
+		loopnode = TreeNode.new("loop", "loop")
+		createtree(loopnode, body)
+		currentnode.addnode(loopnode)
 
 	else#Primitive
 		command = String.new
@@ -102,14 +186,14 @@ class Interpreter
   end #while
   end #createtree
 
-  def ignorespaces(pos)#Jump to the next character
+  def ignorespaces(pos)#Jump to the next non space character
   while query[pos] == SPACE do
     pos += 1
     end
   return pos
   end
 
-  def nextline(pos)#Jump to the next line
+  def nextline(pos)#Jump to the next end of line
   while query[pos] != ENDLINE do
     pos += 1
     end
@@ -122,6 +206,29 @@ class Interpreter
 
 end
 
+class Processtree
+
+  def initialize(rootnode)
+  @rootnode = rootnode
+  end
+
+  def evaluate
+
+  end
+
+  def validate
+  #TODO optional
+
+  end
+
+  def execute(command)
+  #TODO
+  end
+
+end
+
+
+#The main script
 main = Interpreter.new
 if(ARGV[0] == nil) 
 	main.getfrominput
@@ -129,4 +236,6 @@ else
 	main.getfromfile(ARGV[0])
 	end
 main.printtree
+prc = Processtree.new(main.rootnode)
+prc.evaluate
 

@@ -1,0 +1,13 @@
+#do loop simplest test file
+echo "i like"
+do {
+stuff comes here
+and here
+}
+
+do
+{
+more
+
+}
+
