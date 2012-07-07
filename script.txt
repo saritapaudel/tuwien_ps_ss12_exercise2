@@ -1,4 +1,4 @@
-﻿# Das Werkzeug überprüft, ob neue Dateien in einem Eingangs-Ordner erstellt wurden, verschiebt Dateien mit bestimmten Endungen im Namen in andere Ordner, und führt ein Protokoll über verschobene Dateien.
+#had to ad a few brackets.
 
 # simple version:
 # loop do {
@@ -9,8 +9,8 @@
 #   sleep 5
 # }
 
-loop  do {
-	for "<file>.<ext>" try {	
+loop  { do {
+	for "<file>.<ext>" { try {	
 		do {
 			test <ext> = txt
 			mv <file>.<ext> documents
@@ -27,4 +27,6 @@ loop  do {
 		}
 	}
 	sleep 5
+}
+}
 }

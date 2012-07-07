@@ -35,7 +35,7 @@ class Interpreter
   @rootnode = TreeNode.new("root", "rootnode")
   end
 
-  def getfrominput#Get the query from the command line input
+  def getfrominput#Get the query from the command line input - just for fun
   puts "Please enter your query!"
   input = gets
   input.chomp!
@@ -44,7 +44,7 @@ class Interpreter
   end
 
   def getfromfile(path)#Get the query from a file
-  file = File.open(path, "r:ascii")#Trying to prevent ambiguity by using ascii encoding
+  file = File.open(path, "r:ascii")#Hopefully this makes life easier
   @query = file.read
   createtree(@rootnode)
   end
@@ -142,7 +142,7 @@ class Interpreter
 		end #while
 
 		#Add the tree node and process the body
-		fornode = TreeNode.new("for", value)
+		fornode = TreeNode.new("set", value)
 		createtree(fornode, body)
 		currentnode.addnode(fornode)
 
@@ -193,7 +193,7 @@ class Interpreter
   return pos
   end
 
-  def nextline(pos)#Jump to the next end of line
+  def nextline(pos)#Jump to the next end of line character
   while query[pos] != ENDLINE do
     pos += 1
     end
@@ -212,18 +212,51 @@ class Processtree
   @rootnode = rootnode
   end
 
-  def evaluate
+  def evaluate(node = @rootnode)
+  node.nodes.each { |act|
+
+  if(act.type.eql? "primitive")
+     execute(act.value)
+  elsif(act.type.eql? "sequence")
+     donode(act)
+  elsif(act.type.eql? "alternative")
+     trynode(act)
+  elsif(act.type.eql? "set")
+     loopnode(act)
+  elsif(act.type.eql? "loop")
+     fornode(act)
+  end
+
+  act.printout#test
+  }
 
   end
 
   def validate
-  #TODO optional
+  #TODO optional (who needs this? >:])
 
   end
 
   def execute(command)
+  #TODO executes a primitive
+  end
+
+  def donode(node)
   #TODO
   end
+
+  def trynode(node)
+  #TODO
+  end
+
+  def loopnode(node)
+  #TODO
+  end
+
+  def fornode(node)
+  #TODO
+  end
+
 
 end
 
@@ -235,7 +268,6 @@ if(ARGV[0] == nil)
 else
 	main.getfromfile(ARGV[0])
 	end
-main.printtree
 prc = Processtree.new(main.rootnode)
 prc.evaluate
 

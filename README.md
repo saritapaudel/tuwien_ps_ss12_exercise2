@@ -8,8 +8,12 @@ Here's a simple pseudo-BNF of the syntax:
 	<actions> := "{" <action> [ "\n" <actions> ] "}"
 	<sequence> := "do" <actions>
 	<alternative> := "try" <actions>
-	<set> := "for" <pattern> <action>
-	<loop> := "loop" <action>
+	<set> := "for" <pattern> <action> (currently looks like "for" <pattern> <actions>)
+	<loop> := "loop" <action> (same)
+
+## Implementation
+A Treenode class has 3 variables: type, value, nodes. Type stands for primitive, sequence etc. Value is the command for primitives and the pattern for sets.
+Node is an array that contains the stuff inside the brackets.
 
 ## Primitives
 
