@@ -1,3 +1,5 @@
+require "rbconfig"
+
 class TreeNode
   attr_accessor :type, :value, :nodes 
 
@@ -210,6 +212,7 @@ class Processtree
 
   def initialize(rootnode)
   @rootnode = rootnode
+  @os = RbConfig::CONFIG["target_os"]
   end
 
   def evaluate(node = @rootnode)
@@ -237,8 +240,12 @@ class Processtree
 
   end
 
-  def execute(command)
+  def execute(cmd)
   #TODO executes a primitive
+  cmd = "MD teststuff"#Windows test thingie
+  value = system( cmd )
+  puts value
+
   end
 
   def donode(node)
