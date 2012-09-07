@@ -230,7 +230,7 @@ class Processtree
      fornode(act)
   end
 
-  act.printout#test
+  #act.printout#test
   }
 
   end
@@ -240,27 +240,34 @@ class Processtree
 
   end
 
-  def execute(cmd)
-  #TODO executes a primitive
-  cmd = "MD teststuff"#Windows test thingie
+  def execute(cmd) #Primitive
+  #executes a shell command
+  puts cmd
   value = system( cmd )
   puts value
-
+  return value #Optional because by default Ruby returns the value of the last statement
   end
 
-  def donode(node)
+  def donode(node) #Sequence
+  #execute all actions but break if one returns false
+  puts "sequence: "
+  node.nodes.each { |act|
+  if(!execute(act.value))
+	return false
+  end
+  }
+  return true
+  end
+
+  def trynode(node) #Alternative
   #TODO
   end
 
-  def trynode(node)
+  def loopnode(node) #Loop
   #TODO
   end
 
-  def loopnode(node)
-  #TODO
-  end
-
-  def fornode(node)
+  def fornode(node) #Set
   #TODO
   end
 
