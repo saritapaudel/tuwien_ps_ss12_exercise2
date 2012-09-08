@@ -30,6 +30,7 @@ class Interpreter
   #ascii constants
   ENDLINE = 10.chr
   SPACE = 32.chr
+  TAB = 9.chr
   COMMENT = "#"
  
   def initialize()
@@ -59,10 +60,11 @@ class Interpreter
   i = 0
 
   while i < query.size do
-	i = ignorespaces(i)
 
 	if(query[i] == COMMENT)#Skip line if it's a comment
-	i = nextline(i)
+  	  while query[i] != ENDLINE do#Jump to the next end of line character
+	    i += 1
+	    end
 
 	elsif(query[i, 3].upcase.eql? "DO ")
 		body = String.new #The primitves inside the sequence
@@ -173,7 +175,7 @@ class Interpreter
 		createtree(loopnode, body)
 		currentnode.addnode(loopnode)
 
-	else#Primitive
+	elsif((query[i] != SPACE) && (query[i] != ENDLINE) && (query[i] != TAB))#Primitive
 		command = String.new
 		while query[i] != ENDLINE do
 		  command.concat(query[i])
@@ -184,23 +186,9 @@ class Interpreter
 		  end
 
 	end #if
-	i += 1
+	i += 1#Move to next character
   end #while
   end #createtree
-
-  def ignorespaces(pos)#Jump to the next non space character
-  while query[pos] == SPACE do#I suspect there is some error here!!!
-    pos += 1
-    end
-  return pos
-  end
-
-  def nextline(pos)#Jump to the next end of line character
-  while query[pos] != ENDLINE do
-    pos += 1
-    end
-  return pos
-  end
 
   def printtree#Test
   @rootnode.printout
