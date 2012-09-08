@@ -1,0 +1,16 @@
+#test alternative on windows
+echo "Starting alternative test"
+
+md alttestdir
+
+try 
+{
+  md alttestdir
+  md alttestdir
+  echo "this should be reached!"
+  echo "error: this shouldn't be reached!"
+}
+rd alttestdir
+
+echo "End of alternative test"
+#End of test

@@ -1,0 +1,7 @@
+#test sets on windows
+echo "Start of set test"
+for "<name>" 
+{
+}
+echo "End of set test"
+#End of test

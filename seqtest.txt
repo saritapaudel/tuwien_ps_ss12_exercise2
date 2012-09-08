@@ -1,0 +1,16 @@
+#test sequence on windows
+echo "Starting sequence test"
+
+do 
+{
+ echo "hello"
+ echo "user!"
+  md sequencetestdir
+  echo "this should be reached"
+ md sequencetestdir
+ echo "error: this shouldn't be reached"
+}
+rd sequencetestdir
+
+echo "End of sequence test"
+#End of test

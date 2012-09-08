@@ -118,11 +118,11 @@ class Interpreter
 		body = String.new #The primitves inside the sequence
 		brackets = 0
 
-		while !(query[i] == "\"") do#Go to the position wildcards
+		while query[i] != "\"" do#Go to the position wildcards
 		i += 1
 		end
 		i += 1
-		while !(query[i] == "\"") do
+		while query[i] != "\"" do
 		value.concat(query[i])
 		i += 1
 		end
@@ -175,7 +175,7 @@ class Interpreter
 
 	else#Primitive
 		command = String.new
-		while !(query[i] == ENDLINE) do
+		while query[i] != ENDLINE do
 		  command.concat(query[i])
 		  i += 1
 		  end
@@ -189,7 +189,7 @@ class Interpreter
   end #createtree
 
   def ignorespaces(pos)#Jump to the next non space character
-  while query[pos] == SPACE do
+  while query[pos] == SPACE do#I suspect there is some error here!!!
     pos += 1
     end
   return pos
@@ -225,9 +225,9 @@ class Processtree
   elsif(act.type.eql? "alternative")
      trynode(act)
   elsif(act.type.eql? "set")
-     loopnode(act)
-  elsif(act.type.eql? "loop")
      fornode(act)
+  elsif(act.type.eql? "loop")
+     loopnode(act)
   end
 
   #act.printout#test
@@ -245,7 +245,7 @@ class Processtree
 
   def donode(node) #Sequence
   #execute all actions but break if one returns false
-  puts "sequence: "
+  puts "Sequence: "
   node.nodes.each { |act|
   if(!execute(act.value))
 	return false
@@ -255,16 +255,51 @@ class Processtree
   end
 
   def trynode(node) #Alternative
-  #TODO
+  #same as sequence except it breaks if one returns true
+  puts "Alternative: "
+  node.nodes.each { |act|
+  if(execute(act.value))
+	return true
+  end
+  }
+  return false
   end
 
-  def loopnode(node) #Loop
-  #TODO
+  def wildcardexec(cmd)
+  
   end
 
   def fornode(node) #Set
   #TODO
+  wildcard = node.value
+  Dir.foreach(Dir.pwd) do |entry|#List of files in this directory
+   puts entry
+   end
+  end# fornode
+
+  def loopnode(node) #Loop
+  #executes until true and there is one successfull primitive
+  success = true
+  while success == true do
+  node.nodes.each { |act|
+  if(act.type.eql? "primitive")
+     success = execute(act.value)
+  elsif(act.type.eql? "sequence")
+     success = donode(act)
+  elsif(act.type.eql? "alternative")
+     success = trynode(act)
+  elsif(act.type.eql? "set")
+     success = fornode(act)
+  elsif(act.type.eql? "loop")
+     success = loopnode(act)
   end
+  if(!success)
+    return false
+    end
+  }
+  end# while
+  return true
+  end# loopnode
 
 
 end
