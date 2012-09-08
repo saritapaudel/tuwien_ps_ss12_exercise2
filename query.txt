@@ -1,9 +1,10 @@
 #test sequence on windows
-do {
-  echo "i like"
-  echo "pancake"
-  md testdirectory
-  echo "this should be reached"
-  md testdirectory
-  echo "this shouldn't be reached"
+do 
+   {
+echo "i like"
+echo "pancake"
+   md testdirectory
+echo "this should be reached"
+md testdirectory
+echo "this shouldn't be reached"
 }

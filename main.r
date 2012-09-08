@@ -67,7 +67,7 @@ class Interpreter
 	elsif(query[i, 3].upcase.eql? "DO ")
 		body = String.new #The primitves inside the sequence
 		brackets = 0
-		while !(query[i] == "{") do#Go to the position of the opening bracket
+		while query[i] != "{" do#Go to the position of the opening bracket
 		i += 1
 		end
 		while brackets >= 0 do#Get the stuff inside the brackets
@@ -92,7 +92,7 @@ class Interpreter
 	elsif(query[i, 4].upcase.eql? "TRY ")
 		body = String.new #The primitves inside the sequence
 		brackets = 0
-		while !(query[i] == "{") do#Go to the position of the opening bracket
+		while query[i] != "{" do#Go to the position of the opening bracket
 		i += 1
 		end
 		while brackets >= 0 do#Get the stuff inside the brackets
@@ -127,7 +127,7 @@ class Interpreter
 		i += 1
 		end
 
-		while !(query[i] == "{") do#Go to the position of the opening bracket
+		while query[i] != "{" do#Go to the position of the opening bracket
 		i += 1
 		end
 		while brackets >= 0 do#Get the stuff inside the brackets
@@ -152,7 +152,7 @@ class Interpreter
 	elsif(query[i, 5].upcase.eql? "LOOP ")
 		body = String.new #The primitves inside the sequence
 		brackets = 0
-		while !(query[i] == "{") do#Go to the position of the opening bracket
+		while query[i] != "{" do#Go to the position of the opening bracket
 		i += 1
 		end
 		while brackets >= 0 do#Get the stuff inside the brackets
@@ -232,11 +232,6 @@ class Processtree
 
   #act.printout#test
   }
-
-  end
-
-  def validate
-  #TODO optional (who needs this? >:])
 
   end
 

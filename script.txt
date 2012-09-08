@@ -1,4 +1,4 @@
-#had to ad a few brackets.
+#had to add a few brackets.
 
 # simple version:
 # loop do {
