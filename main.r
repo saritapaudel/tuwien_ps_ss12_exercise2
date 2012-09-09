@@ -253,14 +253,45 @@ class Processtree
   return false
   end
 
-  def wildcardexec(cmd)
+  def wildcardexec(cmd) #Executes a shell command with a wildcard
   
   end
 
   def fornode(node) #Set
-  #TODO
-  wildcard = node.value
-  Dir.foreach(Dir.pwd) do |entry|#List of files in this directory
+  #same as sequence but wildcards are added
+
+  wildcards = Array.new
+  starredpath = String.new
+
+  i = 0
+  while i < node.value.size do#Create an array of wildcards
+    if(node.value[i] == "<")
+      i += 1
+      wc = String.new
+      wc.concat("<")#Opening bracket (if needed)
+      while(node.value[i] != ">") do
+	wc.concat(node.value[i])
+	i += 1
+	end# while
+      if(wc.size > 0)
+        wildcards.push wc
+        end# if
+      wc.concat(">")#Closing bracket (if needed)
+      starredpath.concat("*")#Substitute it with a star
+    else
+    starredpath.concat(node.value[i])
+    end# if
+    i += 1
+    end# while
+
+  #testprint
+  puts "node value: ", node.value, starredpath, " wildcards: "
+  wildcards.each { |wc|
+  puts wc
+  }
+
+   Dir.foreach(starredpath) do |entry|
+  #Dir.foreach(Dir.pwd) do |entry|#List of files in this directory
    puts entry
    end
   end# fornode

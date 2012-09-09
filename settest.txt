@@ -1,7 +1,8 @@
 #test sets on windows
 echo "Start of set test"
-for "<name>" 
+for "<dir>/<name>.txt" 
 {
+  echo "inside!"
 }
 echo "End of set test"
 #End of test
