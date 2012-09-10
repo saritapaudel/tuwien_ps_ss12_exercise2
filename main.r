@@ -290,17 +290,21 @@ class Processtree
   puts wc
   }
 
-   Dir.foreach(starredpath) do |entry|
+  #Dir.foreach(starredpath) do |entry|
   #Dir.foreach(Dir.pwd) do |entry|#List of files in this directory
-   puts entry
-   end
+  # puts entry
+  # end
+
   end# fornode
 
   def loopnode(node) #Loop
   #executes until true and there is one successfull primitive
   success = true
+  i = 0
+  number = 0
+
   while success == true do
-  node.nodes.each { |act|
+  act = node.nodes[i]
   if(act.type.eql? "primitive")
      success = execute(act.value)
   elsif(act.type.eql? "sequence")
@@ -312,10 +316,18 @@ class Processtree
   elsif(act.type.eql? "loop")
      success = loopnode(act)
   end
-  if(!success)
+
+  number += node.nodes[i].nodes.size
+  i += 1
+
+  if((!success) || (number == 0))
     return false
-    end
-  }
+  elsif(i == node.nodes.size)
+    i = 0
+    number = 0
+  end
+  
+
   end# while
   return true
   end# loopnode

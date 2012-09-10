@@ -1,0 +1,26 @@
+#Testing loops
+
+echo "Starting loop test!"
+
+md looptestdir
+
+loop {
+
+
+for "" {
+
+  rd looptestdir
+
+}
+}
+
+
+echo "now entering infinite loop"
+
+loop {
+
+try {
+echo "never gonna stop"
+}
+
+}
