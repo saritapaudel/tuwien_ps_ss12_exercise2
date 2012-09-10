@@ -253,9 +253,6 @@ class Processtree
   return false
   end
 
-  def wildcardexec(cmd) #Executes a shell command with a wildcard
-  
-  end
 
   def fornode(node) #Set
   #same as sequence but wildcards are added
@@ -289,11 +286,46 @@ class Processtree
   wildcards.each { |wc|
   puts wc
   }
+  
+   entries = Dir.glob(starredpath).each { |entry|
+   puts entry#testprint
 
-  #Dir.foreach(starredpath) do |entry|
-  #Dir.foreach(Dir.pwd) do |entry|#List of files in this directory
-  # puts entry
-  # end
+   #Get the current value of wildcards
+   values = Array.new
+   value = String.new
+   i = 0
+   j = 0
+   while i < starredpath.size do
+     if(starredpath[i] == "*" && i < starredpath.size - 1)
+	while starredpath[i + 1] != entry[j] do
+	  value.concat(entry[j])
+	  j += 1
+	end# while
+	values.push(value)
+	value = String.new
+     elsif(starredpath[i] == "*")#Wildcard is at last position
+	while j < entry.size do
+	  value.concat(entry[j])
+	  j += 1
+	end# while
+	values.push(value)
+	value = String.new
+     end# if
+     i += 1
+     j += 1
+   end# while
+
+   subnodes = node.nodes.each { |act|
+     cmd = act.value
+     i = 0
+     while i < wildcards.size do
+       cmd = cmd.gsub(wildcards[i], values[i])
+       i += 1
+       end# while
+   execute(cmd)
+   }# act
+
+   }# entry
 
   end# fornode
 

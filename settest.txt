@@ -2,7 +2,7 @@
 echo "Start of set test"
 for "<dir>/<name>.txt" 
 {
-  echo "inside!"
+  echo "folder is <dir>, name is <name>"
 }
 echo "End of set test"
 #End of test
