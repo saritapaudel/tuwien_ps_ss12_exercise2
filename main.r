@@ -244,7 +244,7 @@ class Processtree
   #execute all actions but break if one returns false
   puts "Sequence: "
   node.nodes.each { |act|
-  if(!execute(act.value))
+  if(!evaluate(act))
 	return false
   end
   }
@@ -255,7 +255,7 @@ class Processtree
   #same as sequence except it breaks if one returns true
   puts "Alternative: "
   node.nodes.each { |act|
-  if(execute(act.value))
+  if(evaluate(act))
 	return true
   end
   }
@@ -326,18 +326,15 @@ class Processtree
      j += 1
    end# while
 
-   node.nodes.each { |act|#Handles primitives but handling sets is tricky
-     cmd = act.value
+   node.nodes.each { |act|
+     old = act.value
      i = 0
      while i < wildcards.size do
-       cmd = cmd.gsub(wildcards[i], values[i])
+       act.value = act.value.gsub(wildcards[i], values[i])
        i += 1
        end# while
-     if(act.type.eql? "primitive")
-        execute(cmd)
-     else
-        evaluate(act)
-     end
+     evaluate(act)
+     act.value = old
    }# act
 
    }# entry
