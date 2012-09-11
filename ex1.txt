@@ -1,0 +1,8 @@
+#organize files
+#for some reason mkdir example1/<ext> doesn't work (cygwin on xp)
+
+ for "example1/<file>.<ext>" {
+       mkdir <ext>
+       mv example1/<file>.<ext> <ext>/
+       echo "moved example1/<file>.<ext> to <ext>/" >> example1/log.txt
+   }

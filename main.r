@@ -203,24 +203,33 @@ class Processtree
   @os = RbConfig::CONFIG["target_os"]
   end
 
-  def evaluate(node = @rootnode)
-  node.nodes.each { |act|
 
-  if(act.type.eql? "primitive")
-     execute(act.value)
-  elsif(act.type.eql? "sequence")
-     donode(act)
-  elsif(act.type.eql? "alternative")
-     trynode(act)
-  elsif(act.type.eql? "set")
-     fornode(act)
-  elsif(act.type.eql? "loop")
-     loopnode(act)
+
+  def evaluate(node)
+
+  success = false
+
+  if(node.type.eql? "primitive")
+     success = execute(node.value)
+  elsif(node.type.eql? "sequence")
+     success = donode(node)
+  elsif(node.type.eql? "alternative")
+     success = trynode(node)
+  elsif(node.type.eql? "set")
+     success = fornode(node)
+  elsif(node.type.eql? "loop")
+     success = loopnode(node)
   end
 
   #act.printout#test
-  }
+  return success
+  end
 
+
+  def start()
+  @rootnode.nodes.each { |act|
+  evaluate(act)
+  }
   end
 
   def execute(cmd) #Primitive
@@ -303,6 +312,7 @@ class Processtree
 	end# while
 	values.push(value)
 	value = String.new
+	j -= 1
      elsif(starredpath[i] == "*")#Wildcard is at last position
 	while j < entry.size do
 	  value.concat(entry[j])
@@ -310,19 +320,24 @@ class Processtree
 	end# while
 	values.push(value)
 	value = String.new
+	j -= 1
      end# if
      i += 1
      j += 1
    end# while
 
-   subnodes = node.nodes.each { |act|
+   node.nodes.each { |act|#Handles primitives but handling sets is tricky
      cmd = act.value
      i = 0
      while i < wildcards.size do
        cmd = cmd.gsub(wildcards[i], values[i])
        i += 1
        end# while
-   execute(cmd)
+     if(act.type.eql? "primitive")
+        execute(cmd)
+     else
+        evaluate(act)
+     end
    }# act
 
    }# entry
@@ -336,19 +351,7 @@ class Processtree
   number = 0
 
   while success == true do
-  act = node.nodes[i]
-  if(act.type.eql? "primitive")
-     success = execute(act.value)
-  elsif(act.type.eql? "sequence")
-     success = donode(act)
-  elsif(act.type.eql? "alternative")
-     success = trynode(act)
-  elsif(act.type.eql? "set")
-     success = fornode(act)
-  elsif(act.type.eql? "loop")
-     success = loopnode(act)
-  end
-
+  evaluate(node.nodes[i])
   number += node.nodes[i].nodes.size
   i += 1
 
@@ -376,5 +379,5 @@ else
 	main.getfromfile(ARGV[0])
 	end
 prc = Processtree.new(main.rootnode)
-prc.evaluate
+prc.start
 

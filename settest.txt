@@ -1,8 +1,8 @@
 #test sets on windows
 echo "Start of set test"
-for "<dir>/<name>.txt" 
+for "<dir>/<name>.<ext>" 
 {
-  echo "folder is <dir>, name is <name>"
+  echo "folder is <dir>, name is <name>, extension is <ext>"
 }
 echo "End of set test"
 #End of test

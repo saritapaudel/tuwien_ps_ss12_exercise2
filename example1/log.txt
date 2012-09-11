@@ -1,0 +1,3 @@
+"moved example1/log.txt to txt/" 
+"moved example1/mus.wav to wav/" 
+"moved example1/pic.bmp to bmp/" 
