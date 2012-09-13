@@ -1,0 +1,11 @@
+﻿
+cat example3/www/header.txt >> example3/www/index.html
+
+for "example3/<name>.jpg" do {
+	cp example3/<name>.jpg example3/www/detail/<name>.jpg
+	convert example3/<name>.jpg -resize 100x100 example3/www/thumb/<name>.jpg
+	echo -e "<tr><td><a href=\042detail/<name>.jpg\042><img src=\042thumb/<name>.jpg\042/></a></td><td><name></td></tr>" >> example3/www/index.html
+
+}
+
+cat example3/www/footer.txt >> example3/www/index.html

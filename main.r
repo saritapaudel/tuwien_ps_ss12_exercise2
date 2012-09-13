@@ -327,14 +327,29 @@ class Processtree
    end# while
 
    node.nodes.each { |act|
+     #Substitute the new value
      old = act.value
      i = 0
      while i < wildcards.size do
        act.value = act.value.gsub(wildcards[i], values[i])
+       j = 0
+       subs = Array.new#Subnodes
+       while j < act.nodes.size do
+         subs[j] = act.nodes[j].value
+         act.nodes[j].value = act.nodes[j].value.gsub(wildcards[i], values[i])
+         j += 1
+         end
        i += 1
        end# while
+     #Evaluate
      evaluate(act)
+     #Substitute the old value back
      act.value = old
+     j = 0
+       while j < act.nodes.size do
+         act.nodes[j].value = subs[j]
+         j += 1
+         end
    }# act
 
    }# entry

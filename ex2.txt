@@ -1,0 +1,11 @@
+﻿
+for "<schema>_<message>.txt" {
+   echo -n "" > <schema>.txt
+   cat <schema>_<message>.txt >> <schema>.txt
+   try {
+      open <schema>.txt
+      nano <schema>.txt
+      emacs <schema>.txt
+      vi <schema>.txt
+      }
+}
