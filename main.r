@@ -234,9 +234,9 @@ class Processtree
 
   def execute(cmd) #Primitive
   #executes a shell command
-  puts cmd
+  #puts cmd
   value = system( cmd )
-  puts value
+  #puts value
   return value #Optional because by default Ruby returns the value of the last statement
   end
 
@@ -253,7 +253,7 @@ class Processtree
 
   def trynode(node) #Alternative
   #same as sequence except it breaks if one returns true
-  puts "Alternative: "
+  #puts "Alternative: "
   node.nodes.each { |act|
   if(evaluate(act))
 	return true
@@ -291,13 +291,13 @@ class Processtree
     end# while
 
   #testprint
-  puts "node value: ", node.value, starredpath, " wildcards: "
-  wildcards.each { |wc|
-  puts wc
-  }
+  #puts "node value: ", node.value, starredpath, " wildcards: "
+  #wildcards.each { |wc|
+  #puts wc
+  #}
   
    entries = Dir.glob(starredpath).each { |entry|
-   puts entry#testprint
+   #puts entry#testprint
 
    #Get the current value of wildcards
    values = Array.new
